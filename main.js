@@ -21,6 +21,39 @@ const authDeGoogle = new JWT({
 const documentoID = '1dApPOFEGd_L71rZGm8fvbA7aLRwmb9zYx8jJvGhALYY';
 const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
 
+
+bot.command('pruebaexcel', async (contexto) => {
+  try {
+    contexto.reply('Escribiendo en el Excel, dame un segundo...');
+    
+    // Cargar la info del Excel
+    await doc.loadInfo(); 
+    const hoja = doc.sheetsByIndex[0]; // Selecciona la primera hoja (pestaña)
+    
+    // Inyectar una fila de prueba
+    await hoja.addRow({
+      Fecha: '2026-06-09', 
+      Maquina: 'Máquina 1',
+      Producto: 'Inyección de prueba',
+      Cantidad: 100
+    });
+    
+    contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
+  } catch (error) {
+    console.error('Error con el Excel:', error);
+    contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
+  }
+});
+
+//Inicio del bot
+try{
+  bot.launch();
+  console.log('Bot iniciado correctamente Presiona Ctrl+C para detenerlo');
+}catch(error){
+  console.error('Error al iniciar el bot:', error);
+}
+
+
 // function numeroRandom(){
 //     return Math.floor(Math.random() * 100) + 1;
 // };
@@ -47,38 +80,3 @@ const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
 //     const mensajeBot = cont.update.message.text;
 //     cont.reply('Miraaaa dijiste esta wea de comando ' + mensajeBot);
 // });
-
-
-
-
-bot.command('pruebaexcel', async (contexto) => {
-  try {
-    contexto.reply('Escribiendo en el Excel, dame un segundo...');
-    
-    // Cargar la info del Excel
-    await doc.loadInfo(); 
-    const hoja = doc.sheetsByIndex[0]; // Selecciona la primera hoja (pestaña)
-    
-    // Inyectar una fila de prueba
-    await hoja.addRow({
-      Fecha: '2026-06-09', 
-      Maquina: 'Máquina 1',
-      Producto: 'Inyección de prueba',
-      Cantidad: 100
-    });
-
-    contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
-  } catch (error) {
-    console.error('Error con el Excel:', error);
-    contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
-  }
-});
-
-//Inicio del bot
-try{
-    bot.launch();
-    console.log('Bot iniciado correctamente Presiona Ctrl+C para detenerlo');
-}catch(error){
-    console.error('Error al iniciar el bot:', error);
-}
-
