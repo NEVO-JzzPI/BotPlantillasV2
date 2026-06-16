@@ -1,3 +1,4 @@
+const {escribirEnExcel} = require('./google/GuardarSheets.js');
 const {Telegraf} = require('telegraf');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { JWT } = require('google-auth-library');
@@ -24,17 +25,8 @@ bot.command('pruebaexcel', async (contexto) => {
   try {
     contexto.reply('Escribiendo en el Excel, dame un segundo...');
     
-    // Cargar la info del Excel
-    await doc.loadInfo(); 
-    const hoja = doc.sheetsByIndex[0]; // Selecciona la primera hoja (pestaña)
+    await escribirEnExcel();
     
-    // Inyectar una fila de prueba
-    await hoja.addRow({
-      Fecha: '2026-06-09', 
-      Maquina: 'Máquina 1',
-      Producto: 'Inyección de prueba',
-      Cantidad: 100
-    });
     
     contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
   } catch (error) {
