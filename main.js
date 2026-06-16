@@ -1,14 +1,12 @@
 const {Telegraf} = require('telegraf');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { JWT } = require('google-auth-library');
-const information = require('./information.json');
-
+const information = require('./json/information.json');
 
 const bot = new Telegraf(information.token);
 const mensajeAyuda = 'Puta que andai perdido ql';
+const credenciales = require('./json/credenciales.json');
 
-const credenciales = require('./inventario-telegram-bot.json');
-const informacion = require('./information.json');
 
 // Autenticación del robot de Google
 const authDeGoogle = new JWT({
