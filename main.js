@@ -1,24 +1,24 @@
 const {escribirEnExcel} = require('./google/GuardarSheets.js');
 const {Telegraf} = require('telegraf');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { JWT } = require('google-auth-library');
 const information = require('./json/information.json');
+const MiIdTelegram = information.IdTelegram;
+
+
 
 const bot = new Telegraf(information.token);
-const mensajeAyuda = 'Puta que andai perdido ql';
-const credenciales = require('./json/credenciales.json');
 
-
-// Autenticación del robot de Google
-const authDeGoogle = new JWT({
-  email: credenciales.client_email,
-  key: credenciales.private_key,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+//seguridad para que solo el dueño del bot pueda usarlo
+bot.use((ctx, next) => {
+  if (ctx.from.id.toString() === MiIdTelegram) {
+    return next();
+  } else {
+    ctx.reply('Lo siento, no estás autorizado para usar este bot.');
+    return;
+  }
 });
 
+const mensajeAyuda = 'Puta que andai perdido ql';
 
-const documentoID = '1dApPOFEGd_L71rZGm8fvbA7aLRwmb9zYx8jJvGhALYY';
-const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
 
 
 bot.command('pruebaexcel', async (contexto) => {
@@ -33,6 +33,10 @@ bot.command('pruebaexcel', async (contexto) => {
     console.error('Error con el Excel:', error);
     contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
   }
+});
+bot.command('miid', (ctx) => {
+  const miNumeroDeId = ctx.from.id;
+  ctx.reply(`Tu número de ID secreto es: ${miNumeroDeId}`);
 });
 
 //Inicio del bot
