@@ -1,4 +1,5 @@
 node_modules/
 information.json
-json/
+json/*
+!json/productos.json
 

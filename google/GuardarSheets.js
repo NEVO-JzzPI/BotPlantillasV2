@@ -1,17 +1,13 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { JWT } = require('google-auth-library');
-const information = require('../json/information.json');
-
-const credenciales = require('../json/credenciales.json');
 
 const authDeGoogle = new JWT({
-  email: credenciales.client_email,
-  key: credenciales.private_key,
+  email: process.env.GOOGLE_CLIENT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), 
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-
-const documentoID = information.DocumentoID;
+const documentoID = process.env.GOOGLE_SHEET_ID;
 const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
 
 async function escribirEnExcel({ Fecha, Maquina, Producto, Cantidad }) {
