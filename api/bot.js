@@ -1,5 +1,5 @@
 const { Telegraf, session, Scenes } = require('telegraf');
-const inventarioWizard = require('../scenes/inventarioWizard.js'); 
+const inventarioWizard = require('../scenes/InventarioWizard.js'); 
 
 // Extraemos las llaves desde la nube (Vercel), no desde el JSON local
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
