@@ -14,16 +14,16 @@ const authDeGoogle = new JWT({
 const documentoID = information.DocumentoID;
 const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
 
-async function escribirEnExcel(maquina, producto, cantidad,fechaHoy) {
+async function escribirEnExcel({ Fecha, Maquina, Producto, Cantidad }) {
     try {
         
         await doc.loadInfo(); 
         const hoja = doc.sheetsByIndex[0]; 
         await hoja.addRow({
-            Fecha: fechaHoy,
-            Maquina: maquina,
-            Producto: producto,
-            Cantidad: cantidad
+            Fecha: Fecha,
+            Maquina: Maquina,
+            Producto: Producto,
+            Cantidad: Cantidad
         });
 
 
