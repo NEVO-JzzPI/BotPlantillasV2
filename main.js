@@ -1,7 +1,8 @@
 const {escribirEnExcel} = require('./google/GuardarSheets.js');
-const {Telegraf} = require('telegraf');
+const {Telegraf,session, Scenes} = require('telegraf');
 const information = require('./json/information.json');
 const MiIdTelegram = information.IdTelegram;
+const inventarioWizard = require('./scenes/inventarioWizard.js');
 
 
 
@@ -17,26 +18,36 @@ bot.use((ctx, next) => {
   }
 });
 
-const mensajeAyuda = 'Puta que andai perdido ql';
+// const mensajeAyuda = 'Puta que andai perdido ql';
 
 
 
-bot.command('pruebaexcel', async (contexto) => {
-  try {
-    contexto.reply('Escribiendo en el Excel, dame un segundo...');
+// bot.command('pruebaexcel', async (contexto) => {
+//   try {
+//     contexto.reply('Escribiendo en el Excel, dame un segundo...');
     
-    await escribirEnExcel();
+//     await escribirEnExcel();
     
     
-    contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
-  } catch (error) {
-    console.error('Error con el Excel:', error);
-    contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
-  }
-});
-bot.command('miid', (ctx) => {
-  const miNumeroDeId = ctx.from.id;
-  ctx.reply(`Tu número de ID secreto es: ${miNumeroDeId}`);
+//     contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
+//   } catch (error) {
+//     console.error('Error con el Excel:', error);
+//     contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
+//   }
+// });
+// bot.command('miid', (ctx) => {
+//   const miNumeroDeId = ctx.from.id;
+//   ctx.reply(`Tu número de ID secreto es: ${miNumeroDeId}`);
+// });
+
+const stage = new Scenes.Stage([inventarioWizard]);
+// Activamos la memoria del bot (OBLIGATORIO para Wizards)
+bot.use(session());
+// Le conectamos el teatro al bot
+bot.use(stage.middleware());
+
+bot.command('nuevoingreso', (ctx) => {
+  ctx.scene.enter('WIZARD_INVENTARIO');
 });
 
 //Inicio del bot
