@@ -1,46 +1,53 @@
-const {Telegraf} = require('telegraf');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { JWT } = require('google-auth-library');
+const {escribirEnExcel} = require('./google/GuardarSheets.js');
+const {Telegraf,session, Scenes} = require('telegraf');
 const information = require('./json/information.json');
+const MiIdTelegram = information.IdTelegram;
+const inventarioWizard = require('./scenes/inventarioWizard.js');
+
+
 
 const bot = new Telegraf(information.token);
-const mensajeAyuda = 'Puta que andai perdido ql';
-const credenciales = require('./json/credenciales.json');
 
-
-// Autenticación del robot de Google
-const authDeGoogle = new JWT({
-  email: credenciales.client_email,
-  key: credenciales.private_key,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+//seguridad para que solo el dueño del bot pueda usarlo
+bot.use((ctx, next) => {
+  if (ctx.from.id.toString() === MiIdTelegram) {
+    return next();
+  } else {
+    ctx.reply('Lo siento, no estás autorizado para usar este bot.');
+    return;
+  }
 });
 
-
-const documentoID = '1dApPOFEGd_L71rZGm8fvbA7aLRwmb9zYx8jJvGhALYY';
-const doc = new GoogleSpreadsheet(documentoID, authDeGoogle);
+// const mensajeAyuda = 'Puta que andai perdido ql';
 
 
-bot.command('pruebaexcel', async (contexto) => {
-  try {
-    contexto.reply('Escribiendo en el Excel, dame un segundo...');
+
+// bot.command('pruebaexcel', async (contexto) => {
+//   try {
+//     contexto.reply('Escribiendo en el Excel, dame un segundo...');
     
-    // Cargar la info del Excel
-    await doc.loadInfo(); 
-    const hoja = doc.sheetsByIndex[0]; // Selecciona la primera hoja (pestaña)
+//     await escribirEnExcel();
     
-    // Inyectar una fila de prueba
-    await hoja.addRow({
-      Fecha: '2026-06-09', 
-      Maquina: 'Máquina 1',
-      Producto: 'Inyección de prueba',
-      Cantidad: 100
-    });
     
-    contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
-  } catch (error) {
-    console.error('Error con el Excel:', error);
-    contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
-  }
+//     contexto.reply('¡Anotado! Revisa tu Google Sheet. 🚀');
+//   } catch (error) {
+//     console.error('Error con el Excel:', error);
+//     contexto.reply('Pucha, hubo un error. Revisa la consola de Visual Studio.');
+//   }
+// });
+// bot.command('miid', (ctx) => {
+//   const miNumeroDeId = ctx.from.id;
+//   ctx.reply(`Tu número de ID secreto es: ${miNumeroDeId}`);
+// });
+
+const stage = new Scenes.Stage([inventarioWizard]);
+// Activamos la memoria del bot (OBLIGATORIO para Wizards)
+bot.use(session());
+// Le conectamos el teatro al bot
+bot.use(stage.middleware());
+
+bot.command('nuevoingreso', (ctx) => {
+  ctx.scene.enter('WIZARD_INVENTARIO');
 });
 
 //Inicio del bot
