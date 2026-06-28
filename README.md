@@ -52,7 +52,8 @@ El sistema abandona el método tradicional de *Long Polling* a favor de un model
 5. **Inyección en la Nube:** Tras recolectar y validar aritméticamente la entrada final, el backend se autentica criptográficamente con Google Cloud (mediante un token JWT) e inyecta la nueva fila en la hoja de cálculo.
 6. **Cierre de Ciclo:** El bot confirma el éxito de la operación al usuario y la función Serverless de Vercel se apaga automáticamente, liberando los recursos.
 
-!image.png
+![Diagrama de flujo de trabajo](https://github.com/user-attachments/assets/fb8ed874-6837-458b-bea1-765947c2e3d9)
+
 
 ### 3.Seguridad y Gestión de Credenciales
 
