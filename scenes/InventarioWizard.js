@@ -20,16 +20,23 @@ const inventarioWizard = new Scenes.WizardScene(
   
   (ctx) => {
     if (!ctx.message || !ctx.message.text) return;
-    
+    if(ctx.message.text === 'Volver atras') {
+      ctx.wizard.selectStep(0);
+      ctx.reply(
+        '🔙 Volvimos un paso atrás.\n\n¿En qué máquina estás?',
+        Markup.keyboard(['Máquina 1', 'Máquina 2', 'Máquina 3', 'Máquina 4'], { columns: 2 }).oneTime().resize()
+      );
+      return;
+    }
     ctx.wizard.state.maquina = ctx.message.text;
-    
-    
+
     const categorias = Object.keys(baseDeDatosProductos);
+    const tecladoConAtras = [...categorias, 'Volver atras'];
     
 
     ctx.reply(
       'Selecciona la categoría del producto:',
-      Markup.keyboard(categorias, { columns: 2 }).oneTime().resize()
+      Markup.keyboard(tecladoConAtras, { columns: 2 }).oneTime().resize()
     );
     
     return ctx.wizard.next();
@@ -38,6 +45,17 @@ const inventarioWizard = new Scenes.WizardScene(
   
   (ctx) => {
     if (!ctx.message || !ctx.message.text) return;
+    if (ctx.message.text === 'Volver atras') {
+      ctx.wizard.selectStep(1);
+      const categorias = Object.keys(baseDeDatosProductos);
+      const tecladoConAtras = [...categorias, 'Volver atras'];
+      
+      ctx.reply(
+        '🔙 Volvimos. Selecciona la categoría del producto:',
+        Markup.keyboard(tecladoConAtras, { columns: 2 }).oneTime().resize()
+      );
+      return; 
+    }
 
     const categoriaElegida = ctx.message.text;
 
@@ -51,10 +69,11 @@ const inventarioWizard = new Scenes.WizardScene(
     
     
     const productosDeLaCategoria = baseDeDatosProductos[categoriaElegida];
+    const tecladoConAtras = [...productosDeLaCategoria, 'Volver atras'];
 
     ctx.reply(
       '¿Qué producto exacto vas a ingresar?',
-      Markup.keyboard(productosDeLaCategoria, { columns: 2 }).oneTime().resize()
+      Markup.keyboard(tecladoConAtras, { columns: 2 }).oneTime().resize()
     );
 
     return ctx.wizard.next();
@@ -63,6 +82,19 @@ const inventarioWizard = new Scenes.WizardScene(
   
   (ctx) => {
     if (!ctx.message || !ctx.message.text) return;
+
+    if (ctx.message.text === 'Volver atras') {
+      ctx.wizard.selectStep(2);
+      const categoria = ctx.wizard.state.categoria;
+      const productosDeLaCategoria = baseDeDatosProductos[categoria];
+      const tecladoConAtras = [...productosDeLaCategoria, 'Volver atras'];
+
+      ctx.reply(
+        '🔙 Volvimos. ¿Qué producto exacto vas a ingresar?',
+        Markup.keyboard(tecladoConAtras, { columns: 2 }).oneTime().resize()
+      );
+      return;
+    }
 
     const productoElegido = ctx.message.text;
     const categoria = ctx.wizard.state.categoria;
@@ -74,9 +106,11 @@ const inventarioWizard = new Scenes.WizardScene(
     }
 
     ctx.wizard.state.producto = productoElegido;
-    
-    
-    ctx.reply('Ingresa la cantidad en números enteros:', Markup.removeKeyboard());
+
+    ctx.reply(
+      'Ingresa la cantidad en números enteros:', 
+      Markup.keyboard(['Volver atras']).oneTime().resize()
+    );
     
     return ctx.wizard.next();
   },
@@ -85,6 +119,14 @@ const inventarioWizard = new Scenes.WizardScene(
   async (ctx) => {
     if (!ctx.message || isNaN(ctx.message.text)) {
       ctx.reply('Eso no es un numero. Ingresa solo números (ej: 50).');
+      return;
+    }
+    if (ctx.message.text === 'Volver atras') {
+      ctx.wizard.selectStep(3);
+      ctx.reply(
+        '🔙 Volvimos. Ingresa la cantidad en números enteros:', 
+        Markup.keyboard(['Volver atras']).oneTime().resize()
+      );
       return;
     }
 
