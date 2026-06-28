@@ -1,29 +1,29 @@
 const { Scenes, Markup } = require('telegraf');
 const { escribirEnExcel } = require('../google/GuardarSheets.js');
-// Importamos tu JSON de productos
+
 const baseDeDatosProductos = require('../json/productos.json');
 
 const inventarioWizard = new Scenes.WizardScene(
   'WIZARD_INVENTARIO',
 
-  // PASO 1: Preguntamos la Máquina
+  
   (ctx) => {
     ctx.reply(
       '🔧 Iniciando registro de inventario.\n\n¿En qué máquina estás?',
-      Markup.keyboard(['Máquina 1', 'Máquina 2', 'Máquina 3'], { columns: 2 })
+      Markup.keyboard(['Máquina 1', 'Máquina 2', 'Máquina 3','Máquina 4'], { columns: 2 })
         .oneTime()
         .resize()
     );
     return ctx.wizard.next();
   },
 
-  // PASO 2: Guardamos Máquina y mostramos las Categorías de productos
+  
   (ctx) => {
     if (!ctx.message || !ctx.message.text) return;
     
     ctx.wizard.state.maquina = ctx.message.text;
     
-    // Extraemos solo los nombres de las categorías (las llaves del JSON)
+    
     const categorias = Object.keys(baseDeDatosProductos);
     
 

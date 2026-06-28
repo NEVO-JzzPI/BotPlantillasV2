@@ -1,27 +1,27 @@
 {
   "Snacks Salados": [
     "De Todito", "Cheetos", "Doritos", "Lays Serrano", 
-    "Mani Salado", "Snacks PF"
+    "Mani Salado", "Snacks PF","Panchitos"
   ],
   "Dulces y Chocolates": [
     "Champañitas", "Cubanitos", "Pinguinitos", "Alfajores", 
     "Tres Negritos", "Chokitas", "Super 8", "Turrones ram", 
-    "Full", "Gomitas Loop", "Rockets"
+    "Full", "Gomitas Loop", "Rockets","Moffins","Brownies","Costa Rama"
   ],
   "Galletas": [
     "Galletas Frac", "Galletas Costa", "Galletas Cracker"
   ],
   "Comida Rápida": [
     "Sopa Instantanea", "Pizzas", "Sandwich", 
-    "Moffins", "Barra de Proteina"
+     "Barra de Proteina"
   ],
   "Bebidas y Jugos": [
-    "Agua Gasificada", "California", "Jugo del Valle", 
+    "Agua Gasificada", "Jugo del Valle", 
     "Coca Cola Original", "Coca Cola Zero", "Pepsi", 
     "Crush", "Limon Soda", "Kem", "Canada Dry"
   ],
   "Energéticas y Café": [
     "Score", "Monster Blanca", "Monster Negra", "Gatorade", 
-    "Café sobre", "Leche Capuchino"
+    "Café sobre", "Leche Capuchino","California"
   ]
 }
